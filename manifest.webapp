@@ -1,0 +1,37 @@
+{
+  "version": "1",
+  "name": "MCC Contacts",
+  "type": "privileged",
+  "launch_path": "/index.html",
+  "description": "Phase 3 of Mobile Cloud Computing",
+  "icons": {
+    "128": "/images/contacts-128.png",
+    "256": "/images/contacts-256.png"
+  },
+  "developer": {
+    "name": "Asgeir Bjarnason",
+    "url": "bjarnason.to"
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "permissions": {
+    "desktop-notification": {
+      "description": "To show notifications"
+    },
+    "geolocation": {
+      "description": "Marking out user location"
+    },
+    "alarms": {
+      "description": "Scheduling alarms"
+    },
+        "device-storage:pictures": {
+        "access": "readcreate"
+    },
+    "systemXHR":{},
+    "contacts": {
+        "description" : "Reading out contacts",
+        "access": "readcreate"
+    }
+  }
+}
