@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="css/headers.css">
     <link rel="stylesheet" type="text/css" href="css/buttons.css">
     <link rel="stylesheet" type="text/css" href="css/toolbars.css">
+    <link rel="stylesheet" type="text/css" href="css/input_areas.css">
+    <link rel="stylesheet" type="text/css" href="css/lists.css">
     <title>MCC Contacts</title>
 </head>
 
@@ -15,7 +17,6 @@
     <section role="region">
         <header>
             <menu type="toolbar">
-                <button id="install"><span class="icon icon-add">add</span></button>
             </menu>
             <h1>
                 MCC Contacts
@@ -26,20 +27,51 @@
 
     <div id="main">
 
-        <button id="cross-domain-xhr" data-l10n-id="cross-domain-xhr">Cross-domain XHR</button>
-        <div id="cross-domain-xhr-display"></div>
+        <form>
+            <p>
+                <input type="text" placeholder="Name" id="name" required="">
+            </p>
+            <p>
+                <input type="text" placeholder="Phone" id="phone" required="">
+            </p>
+            <p>
+                <input type="text" placeholder="Email" id="email" required="">
+            </p>
+        </form>
 
-        <button id="get-all-contacts" data-l10n-id="get-all-contacts">Get all contacts</button>
-        <div id="get-all-contacts-display"></div>
+        <button id="add-contact">Add contact</button>
+        <button id="contacts-server">Contacts (server)</button>
+
+        <section data-type="list" id="contact-list">
+            <header>Contacts</header>
+            <ul id="contact-list-ul">
+                
+<!--                 <li id="contact-list-li">
+                    <aside class="pack-end">
+                        <button class="danger" >Delete</button>
+                    </aside>
+                    <a href="#">
+                        <p id="contact-list-p"></p>
+                    </a>
+                </li> -->
+            </ul>
+        </section>
+
+        <div id="contacts-server-display">
+
+        </div>
+        <br>
+        <button id="contacts-phone">Contacts (phone)</button>
+        <div id="contacts-phone-display"></div>
     </div>
 
-    <footer>
+<!--     <footer>
         <div role="toolbar">
             <ul>
                 <li><button id="reload" class="update" data-l10n-id="update-button">Update</button></li>
             </ul>
         </div>
-    </footer>
+    </footer> -->
 
     <script type="text/javascript" src="js/app.js"></script>
 

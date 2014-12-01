@@ -16,18 +16,6 @@
     "*"
   ],
   "permissions": {
-    "desktop-notification": {
-      "description": "To show notifications"
-    },
-    "geolocation": {
-      "description": "Marking out user location"
-    },
-    "alarms": {
-      "description": "Scheduling alarms"
-    },
-        "device-storage:pictures": {
-        "access": "readcreate"
-    },
     "systemXHR":{},
     "contacts": {
         "description" : "Reading out contacts",
