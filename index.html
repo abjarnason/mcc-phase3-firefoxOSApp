@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/toolbars.css">
     <link rel="stylesheet" type="text/css" href="css/input_areas.css">
     <link rel="stylesheet" type="text/css" href="css/lists.css">
+    <link rel="stylesheet" type="text/css" href="css/gaia-icons/gaia-icons-embedded.css">
     <title>MCC Contacts</title>
 </head>
 
@@ -40,26 +41,21 @@
         </form>
 
         <button id="add-contact">Add contact</button>
-        <button id="contacts-server">Contacts (server)</button>
+        <button id="contacts-server">All contacts</button>
 
         <section data-type="list" id="contact-list">
             <header>Contacts</header>
+            
             <ul id="contact-list-ul">
-                
-<!--                 <li id="contact-list-li">
-                    <aside class="pack-end">
-                        <button class="danger" >Delete</button>
-                    </aside>
-                    <a href="#">
-                        <p id="contact-list-p"></p>
-                    </a>
-                </li> -->
             </ul>
+            
+            <div id="contacts-server-display">
+            </div>
         </section>
-
-        <div id="contacts-server-display">
-
-        </div>
+        
+        <br>
+        <button id="contacts-phone">Get contact</button>
+        <button id="contacts-phone">Delete contact</button>
         <br>
         <button id="contacts-phone">Contacts (phone)</button>
         <div id="contacts-phone-display"></div>
