@@ -33,13 +33,13 @@
                 // 200: "OK". 4: request finished and response is ready
                 if (xhr.status === 200 && xhr.readyState === 4) {
                     //crossDomainXHRDisplay.innerHTML = xhr.response;
-                    var contactInfoFromServer = JSON.parse(xhr.response);
+                    var contacts = JSON.parse(xhr.response);
                 }
 
                 
                 var contactIdArray = [];
                 //create list with contacts from sever
-                for(var i = 0; i < contactInfoFromServer.length; i++){
+                for(var i = 0; i < contacts.length; i++){
 
                     var newLi = document.createElement("li");
                     var newP = document.createElement("p");
@@ -47,8 +47,8 @@
 
                     newA.setAttribute("id", i);
 
-                    var contactName = document.createTextNode(contactInfoFromServer[i].name);
-                    contactIdArray.push(contactInfoFromServer[i]._id);
+                    var contactName = document.createTextNode(contacts[i].name);
+                    contactIdArray.push(contacts[i]._id);
 
                     newP.appendChild(contactName);
                     newA.appendChild(newP);
@@ -62,14 +62,18 @@
                         xhr.open("GET", contactUrl, true);
                         xhr.onreadystatechange = function () {
                             if (xhr.status === 200 && xhr.readyState === 4) {
-                                //crossDomainXHRDisplay.innerHTML = "<h4>Result from Cross-domain XHR</h4>" + xhr.response;
-                                //crossDomainXHRDisplay.style.display = "block";
-                                alert("success!");
+                                //alert("success!");
+                                var contact = JSON.parse(xhr.response);
+                                alert(contact.name + "\n" + contact.email + "\n" + contact.phone);
                             }
                         };
+                        xhr.onerror = function () {
+                            alert("Error 2nd API call")
+                        };
+                        
                         xhr.send();
 
-                        alert(contactUrl);
+                        //alert(contactUrl);
                     }
 
                     newLi.appendChild(newA);
@@ -81,8 +85,7 @@
             };
 
             xhr.onerror = function () {
-                crossDomainXHRDisplay.innerHTML = "<h4>Result from Cross-domain XHR</h4><p>Cross-domain XHR failed</p>";
-                crossDomainXHRDisplay.style.display = "block";
+                alert("First API call")
             };
             xhr.send();
         };
