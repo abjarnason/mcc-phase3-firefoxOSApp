@@ -54,6 +54,7 @@ li a:active {
 }
 
 [data-type="list"] li > a {
+  width: 80%;
   text-decoration: none;
   color: #333;
   display: block;

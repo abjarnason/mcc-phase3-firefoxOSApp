@@ -44,8 +44,16 @@
                     var newLi = document.createElement("li");
                     var newP = document.createElement("p");
                     var newA = document.createElement("a");
+                    var newAIcon = document.createElement("a");
+                    var newAside = document.createElement("aside");
+
+                    newAside.setAttribute("class", "pack-end");
+                    newAIcon.setAttribute("data-icon", "delete");
+
+                    newAside.appendChild(newAIcon);
 
                     newA.setAttribute("id", i);
+                    newAside.setAttribute("id", i);
 
                     var contactName = document.createTextNode(contacts[i].name);
                     contactIdArray.push(contacts[i]._id);
@@ -53,9 +61,9 @@
                     newP.appendChild(contactName);
                     newA.appendChild(newP);
 
+                    // Get all information about a single contact
                     newA.onclick = function(){
-                        //alert(contactIdArray[this.id]);
-                        
+
                         var contactUrl = "http://bjarnason.to:8080/api/contacts/" + contactIdArray[this.id];
                         
                         var xhr = new XMLHttpRequest({mozSystem: true});
@@ -76,6 +84,28 @@
                         //alert(contactUrl);
                     }
 
+                    // Delete single contact
+                    newAside.onclick = function(){
+                        var contactUrl = "http://bjarnason.to:8080/api/contacts/" + contactIdArray[this.id];
+                        
+                        var xhr = new XMLHttpRequest({mozSystem: true});
+                        xhr.open("DELETE", contactUrl, true);
+                        xhr.onreadystatechange = function () {
+                            if (xhr.status === 200 && xhr.readyState === 4) {
+                                alert("Contact deleted");
+                                //var contact = JSON.parse(xhr.response);
+                                //alert(contact.name + "\n" + contact.email + "\n" + contact.phone);
+                            }
+                        };
+                        xhr.onerror = function () {
+                            alert("Error 3rd API call")
+                        };
+                        
+                        xhr.send();
+                        
+                    }
+
+                    newLi.appendChild(newAside);
                     newLi.appendChild(newA);
 
                     var newUl = document.getElementById("contact-list-ul");
