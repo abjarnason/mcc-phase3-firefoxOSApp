@@ -27,6 +27,10 @@
         crossDomainXHRDisplay = document.querySelector("#contacts-server-display");
     if (crossDomainXHR && crossDomainXHRDisplay) {
         crossDomainXHR.onclick = function () {
+
+            var oldUl = document.getElementById("contact-list-ul");
+            oldUl.innerHTML = "";
+
             var xhr = new XMLHttpRequest({mozSystem: true});
             xhr.open("GET", "http://bjarnason.to:8080/api/contacts", true);
             xhr.onreadystatechange = function () {
@@ -44,16 +48,18 @@
                     var newLi = document.createElement("li");
                     var newP = document.createElement("p");
                     var newA = document.createElement("a");
-                    var newAIcon = document.createElement("a");
+                    var newADelete = document.createElement("a");
+                    var newAAdd = document.createElement("a");
                     var newAside = document.createElement("aside");
 
                     newAside.setAttribute("class", "pack-end");
-                    newAIcon.setAttribute("data-icon", "delete");
+                    newADelete.setAttribute("data-icon", "delete");
+                    newAAdd.setAttribute("data-icon", "add");
 
-                    newAside.appendChild(newAIcon);
+                    newADelete.setAttribute("id", i);
 
                     newA.setAttribute("id", i);
-                    newAside.setAttribute("id", i);
+                    //newAside.setAttribute("id", i);
 
                     var contactName = document.createTextNode(contacts[i].name);
                     contactIdArray.push(contacts[i]._id);
@@ -85,7 +91,7 @@
                     }
 
                     // Delete single contact
-                    newAside.onclick = function(){
+                    newADelete.onclick = function(){
                         var contactUrl = "http://bjarnason.to:8080/api/contacts/" + contactIdArray[this.id];
                         
                         var xhr = new XMLHttpRequest({mozSystem: true});
@@ -104,6 +110,13 @@
                         xhr.send();
                         
                     }
+
+                    newAAdd.onclick = function(){
+                        alert("Add clicked..");
+                    }
+
+                    newAside.appendChild(newAAdd);
+                    newAside.appendChild(newADelete);
 
                     newLi.appendChild(newAside);
                     newLi.appendChild(newA);
