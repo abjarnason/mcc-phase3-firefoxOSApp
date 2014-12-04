@@ -59,6 +59,7 @@
                     newADelete.setAttribute("id", i);
 
                     newA.setAttribute("id", i);
+                    newAAdd.setAttribute("id", i);
                     //newAside.setAttribute("id", i);
 
                     var contactName = document.createTextNode(contacts[i].name);
@@ -112,7 +113,74 @@
                     }
 
                     newAAdd.onclick = function(){
-                        alert("Add clicked..");
+
+                        //alert("contact added..");
+                        
+
+                        var contactUrl = "http://bjarnason.to:8080/api/contacts/" + contactIdArray[this.id];
+                        
+                        var xhr = new XMLHttpRequest({mozSystem: true});
+                        xhr.open("GET", contactUrl, true);
+                        xhr.onreadystatechange = function () {
+                            if (xhr.status === 200 && xhr.readyState === 4) {
+                                //alert("success!");
+                                var contact = JSON.parse(xhr.response);
+                                //alert(contact.name + "\n" + contact.email + "\n" + contact.phone);
+
+                                var person = new mozContact();
+                                person.givenName  = [contact.name];
+                                person.email = [{type:["personal"], value:contact.email}];
+                                person.tel = [{type:["mobile"], value:contact.phone}];
+
+                                // save the new contact
+                                var saving = navigator.mozContacts.save(person);
+
+                                saving.onsuccess = function() {
+                                  alert("Contact added");
+                                  // This update the person as it is stored
+                                  // It includes its internal unique ID
+                                  // Note that saving.result is null here
+                                };
+
+                                saving.onerror = function(err) {
+                                  console.error(err);
+                                };
+
+                            }
+                        };
+                        xhr.onerror = function () {
+                            alert("Error 2nd API call")
+                        };
+                        
+                        xhr.send();
+                        
+
+                    
+
+                        /*
+                        //alert("Add clicked..");
+                        var person = new mozContact();
+                        person.givenName  = ["John"];
+                        person.familyName = ["Doe"];
+                        //person.phone = ["123123"];
+                        //person.email = ["asg@gmail.com"];
+                        //person.nickname   = ["No kidding"];
+
+                        // save the new contact
+                        var saving = navigator.mozContacts.save(person);
+
+                        saving.onsuccess = function() {
+                          alert("Contact added");
+                          // This update the person as it is stored
+                          // It includes its internal unique ID
+                          // Note that saving.result is null here
+                        };
+
+                        saving.onerror = function(err) {
+                          console.error(err);
+                        };
+                        */
+
                     }
 
                     newAside.appendChild(newAAdd);
