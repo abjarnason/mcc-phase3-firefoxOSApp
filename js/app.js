@@ -28,7 +28,7 @@
     if (crossDomainXHR && crossDomainXHRDisplay) {
         crossDomainXHR.onclick = function () {
 
-            var oldUl = document.getElementById("contact-list-ul");
+            var oldUl = document.getElementById("contact-list-server-ul");
             oldUl.innerHTML = "";
 
             var xhr = new XMLHttpRequest({mozSystem: true});
@@ -153,33 +153,6 @@
                         };
                         
                         xhr.send();
-                        
-
-                    
-
-                        /*
-                        //alert("Add clicked..");
-                        var person = new mozContact();
-                        person.givenName  = ["John"];
-                        person.familyName = ["Doe"];
-                        //person.phone = ["123123"];
-                        //person.email = ["asg@gmail.com"];
-                        //person.nickname   = ["No kidding"];
-
-                        // save the new contact
-                        var saving = navigator.mozContacts.save(person);
-
-                        saving.onsuccess = function() {
-                          alert("Contact added");
-                          // This update the person as it is stored
-                          // It includes its internal unique ID
-                          // Note that saving.result is null here
-                        };
-
-                        saving.onerror = function(err) {
-                          console.error(err);
-                        };
-                        */
 
                     }
 
@@ -189,7 +162,7 @@
                     newLi.appendChild(newAside);
                     newLi.appendChild(newA);
 
-                    var newUl = document.getElementById("contact-list-ul");
+                    var newUl = document.getElementById("contact-list-server-ul");
                     newUl.appendChild(newLi);
                 }
 
@@ -202,7 +175,7 @@
         };
     }
 
-    // List contacts
+    // GET contacts from contact book
     var getAllContacts = document.querySelector("#contacts-phone"),
         getAllContactsDisplay = document.querySelector("#contacts-phone-display");
     if (getAllContacts && getAllContactsDisplay) {
@@ -213,7 +186,55 @@
             getContacts.onsuccess = function () {
                 var result = getContacts.result;
                 if (result) {
-                    getAllContactsDisplay.innerHTML += result.givenName + " " + result.familyName + "<br>";
+
+
+                    var newLi = document.createElement("li");
+                    var newP = document.createElement("p");
+                    var newA = document.createElement("a");
+
+                    var newAAdd = document.createElement("a");
+                    var newAside = document.createElement("aside");
+
+                    var listName = document.createTextNode(result.givenName + " " + result.familyName);
+                    newP.appendChild(listName);
+                    newA.appendChild(newP);
+
+                    newAside.setAttribute("class", "pack-end");
+                    newAAdd.setAttribute("data-icon", "add");
+                    //newAAdd.setAttribute("id", i);
+
+                    var fullName = result.givenName + " " + result.familyName;
+                    var phoneNumber = result.tel[0].value;
+
+                    newAAdd.onclick = function(){                        
+                        var xhr = new XMLHttpRequest({mozSystem: true});
+                        xhr.open("POST", "http://bjarnason.to:8080/api/contacts",true);
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.send(JSON.stringify({
+                            "name": fullName,
+                            "email": "",
+                            "phone": phoneNumber}));
+                        alert("Contact added to server");
+                    };
+
+                    newAside.appendChild(newAAdd);
+
+
+                    var newLi = document.createElement("li");
+                    newLi.appendChild(newAside);
+                    newLi.appendChild(newA);
+                    var newUl = document.getElementById("contact-list-phone-ul");
+                    newUl.appendChild(newLi);
+                    /*
+                    var newLi = document.createElement("li");
+                    var newP = document.createElement("p");
+                    var contactName = result.givenName;
+                    newP.appendChild(contactName);
+                    newLi.appendChild(newP);
+
+                    */
+
+                    //getAllContactsDisplay.innerHTML += result.givenName + " " + result.familyName + "<br>";
                     getContacts.continue();
                 }
             };
