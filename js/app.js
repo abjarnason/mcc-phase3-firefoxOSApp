@@ -2,7 +2,7 @@
 "use strict";
 (function () {
 
-    //Add contact to REST server
+    // Add contact to server
     var addContact = document.querySelector("#add-contact")
     if(addContact){
         addContact.onclick = function(){
@@ -22,12 +22,12 @@
         }
     }
 
-    // GET all contacts from server
-    var crossDomainXHR = document.querySelector("#contacts-server"),
-        crossDomainXHRDisplay = document.querySelector("#contacts-server-display");
-    if (crossDomainXHR && crossDomainXHRDisplay) {
+    // Get all contacts from server
+    var crossDomainXHR = document.querySelector("#contacts-server");
+    if (crossDomainXHR) {
         crossDomainXHR.onclick = function () {
 
+            // clear contact list
             var oldUl = document.getElementById("contact-list-server-ul");
             oldUl.innerHTML = "";
 
@@ -36,13 +36,11 @@
             xhr.onreadystatechange = function () {
                 // 200: "OK". 4: request finished and response is ready
                 if (xhr.status === 200 && xhr.readyState === 4) {
-                    //crossDomainXHRDisplay.innerHTML = xhr.response;
                     var contacts = JSON.parse(xhr.response);
                 }
 
-                
                 var contactIdArray = [];
-                //create list with contacts from sever
+                //create list with contacts from sever (with add and delete buttons)
                 for(var i = 0; i < contacts.length; i++){
 
                     var newLi = document.createElement("li");
@@ -57,10 +55,8 @@
                     newAAdd.setAttribute("data-icon", "add");
 
                     newADelete.setAttribute("id", i);
-
                     newA.setAttribute("id", i);
                     newAAdd.setAttribute("id", i);
-                    //newAside.setAttribute("id", i);
 
                     var contactName = document.createTextNode(contacts[i].name);
                     contactIdArray.push(contacts[i]._id);
@@ -77,18 +73,16 @@
                         xhr.open("GET", contactUrl, true);
                         xhr.onreadystatechange = function () {
                             if (xhr.status === 200 && xhr.readyState === 4) {
-                                //alert("success!");
                                 var contact = JSON.parse(xhr.response);
                                 alert(contact.name + "\n" + contact.email + "\n" + contact.phone);
                             }
                         };
-                        xhr.onerror = function () {
-                            alert("Error 2nd API call")
+                        xhr.onerror = function (err) {
+                            alert(err)
                         };
                         
                         xhr.send();
 
-                        //alert(contactUrl);
                     }
 
                     // Delete single contact
@@ -100,46 +94,37 @@
                         xhr.onreadystatechange = function () {
                             if (xhr.status === 200 && xhr.readyState === 4) {
                                 alert("Contact deleted");
-                                //var contact = JSON.parse(xhr.response);
-                                //alert(contact.name + "\n" + contact.email + "\n" + contact.phone);
                             }
                         };
-                        xhr.onerror = function () {
-                            alert("Error 3rd API call")
+                        xhr.onerror = function (err) {
+                            alert(err)
                         };
                         
                         xhr.send();
                         
                     }
 
+                    // Add contact from server to phone
                     newAAdd.onclick = function(){
-
-                        //alert("contact added..");
                         
-
                         var contactUrl = "http://bjarnason.to:8080/api/contacts/" + contactIdArray[this.id];
                         
                         var xhr = new XMLHttpRequest({mozSystem: true});
                         xhr.open("GET", contactUrl, true);
                         xhr.onreadystatechange = function () {
                             if (xhr.status === 200 && xhr.readyState === 4) {
-                                //alert("success!");
                                 var contact = JSON.parse(xhr.response);
-                                //alert(contact.name + "\n" + contact.email + "\n" + contact.phone);
 
                                 var person = new mozContact();
                                 person.givenName  = [contact.name];
                                 person.email = [{type:["personal"], value:contact.email}];
                                 person.tel = [{type:["mobile"], value:contact.phone}];
 
-                                // save the new contact
                                 var saving = navigator.mozContacts.save(person);
 
                                 saving.onsuccess = function() {
-                                  alert("Contact added");
-                                  // This update the person as it is stored
-                                  // It includes its internal unique ID
-                                  // Note that saving.result is null here
+                                  alert("Contact added to phone");
+
                                 };
 
                                 saving.onerror = function(err) {
@@ -149,7 +134,7 @@
                             }
                         };
                         xhr.onerror = function () {
-                            alert("Error 2nd API call")
+                            alert("Error, getAllContacts")
                         };
                         
                         xhr.send();
@@ -168,25 +153,28 @@
 
             };
 
-            xhr.onerror = function () {
-                alert("First API call")
+            xhr.onerror = function (err) {
+                alert(err)
             };
             xhr.send();
         };
     }
 
     // GET contacts from contact book
-    var getAllContacts = document.querySelector("#contacts-phone"),
-        getAllContactsDisplay = document.querySelector("#contacts-phone-display");
-    if (getAllContacts && getAllContactsDisplay) {
+    var getAllContacts = document.querySelector("#contacts-phone");
+    if (getAllContacts) {
         getAllContacts.onclick = function () {
+
             var getContacts = window.navigator.mozContacts.getAll({});
-            getAllContactsDisplay.style.display = "block";
+
+            // clear the contacts list
+            var oldUl = document.getElementById("contact-list-phone-ul");
+            oldUl.innerHTML = "";
 
             getContacts.onsuccess = function () {
                 var result = getContacts.result;
+                // Build a list with contacts from phone
                 if (result) {
-
 
                     var newLi = document.createElement("li");
                     var newP = document.createElement("p");
@@ -201,7 +189,6 @@
 
                     newAside.setAttribute("class", "pack-end");
                     newAAdd.setAttribute("data-icon", "add");
-                    //newAAdd.setAttribute("id", i);
 
                     var fullName = result.givenName + " " + result.familyName;
                     var phoneNumber = result.tel[0].value;
@@ -225,22 +212,13 @@
                     newLi.appendChild(newA);
                     var newUl = document.getElementById("contact-list-phone-ul");
                     newUl.appendChild(newLi);
-                    /*
-                    var newLi = document.createElement("li");
-                    var newP = document.createElement("p");
-                    var contactName = result.givenName;
-                    newP.appendChild(contactName);
-                    newLi.appendChild(newP);
 
-                    */
-
-                    //getAllContactsDisplay.innerHTML += result.givenName + " " + result.familyName + "<br>";
                     getContacts.continue();
                 }
             };
 
-            getContacts.onerror = function () {
-                getAllContactsDisplay.innerHTML += "Error";
+            getContacts.onerror = function (err) {
+                alert(err);
             };
         };
     }
